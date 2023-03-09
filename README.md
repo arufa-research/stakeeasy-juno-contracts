@@ -1,2 +1,6 @@
-# stakeeasy-juno-contracts
-StakeEasy staking contracts for seJuno and bJuno.
+# JUNO StakeEasy contracts
+
+This template contains counter example contracts.
+
+
+

@@ -1,0 +1,140 @@
+import { use, assert, expect }  from "chai";
+import { junokitChai, junokitTypes }  from "junokit";
+
+import { StakingContractContract } from "../artifacts/typescript_schema/StakingContract";
+import { SejunoTokenContract } from "../artifacts/typescript_schema/SejunoToken";
+import { BjunoTokenContract } from "../artifacts/typescript_schema/BjunoToken";
+import { MockSelectionContract } from "../artifacts/typescript_schema/MockSelection";
+import { RewardContractContract } from "../artifacts/typescript_schema/RewardContract";
+
+import { BjunoTokenMigrateContract } from "../artifacts/typescript_schema/BjunoTokenMigrate";
+import { StakingContractMigrateContract } from "../artifacts/typescript_schema/StakingContractMigrate";
+
+import { setup } from "./setupContracts";
+import { setupMigrate } from "./setupMigrateContracts";
+
+use(junokitChai);
+
+describe("contract migration flow", () => {
+  let contract_owner: junokitTypes.UserAccount;
+  let account_1: junokitTypes.UserAccount;
+  let account_2: junokitTypes.UserAccount;
+  let runTs: String;
+  let sejuno_token: SejunoTokenContract, staking_contract: StakingContractContract;
+  let bjuno_token: BjunoTokenContract, validator_info: MockSelectionContract;
+  let reward_contract: RewardContractContract;
+  let window_time: number, unbonding_time: number;
+  let bjuno_migrate_contract: BjunoTokenMigrateContract;
+  let staking_migrate_contract: StakingContractMigrateContract;
+  before(async() => {
+    const result = await setup();
+    runTs = result.runTs;
+    contract_owner = result.contract_owner;
+    account_1 = result.account_1;
+    account_2 = result.account_2;
+    sejuno_token = result.sejuno_token;
+    staking_contract = result.staking_contract;
+    bjuno_token = result.bjuno_token;
+    validator_info = result.validator_info;
+    reward_contract = result.reward_contract;
+    window_time = result.window_time;
+    unbonding_time = result.unbonding_time;
+
+    const migrate_result = await setupMigrate();
+    bjuno_migrate_contract = migrate_result.bjuno_migrate_contract;
+    staking_migrate_contract = migrate_result.staking_migrate_contract;
+  });
+
+  function sleep(seconds: number) {
+    console.log("Sleeping for " + seconds + " seconds");
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+  }
+
+  /*
+    1) Migrate to contract without any state change (bJUNO)
+      - Deposit for bJUNO
+      - Query balance before
+      - Migrate bJUNO contract without state change
+      - Query balance after
+      - Query the newly added query method
+  */
+  it("Migrate to contract without any state change", async () => {
+    const transferAmount_1 = [{ "denom": "ujuno", "amount": "1200000" }];
+    await staking_contract.stakeForBjuno(
+      { account: account_2, transferAmount: transferAmount_1 }
+    );
+    await staking_contract.claimAndStake(
+      { account: contract_owner }
+    );
+
+    // query bjuno balance for account_2
+    const balance_res_1 = await bjuno_token.balance({
+      "address": account_2.account.address,
+    });
+    const account_2_bal_before = balance_res_1.balance;
+    console.log("account_2_bal_before: ", JSON.stringify(account_2_bal_before, null, 2));
+
+    // migrate bJUNO
+    await bjuno_token.migrate(
+      {},
+      bjuno_migrate_contract.codeId,
+      contract_owner
+    );
+
+    // query bjuno balance for account_2 again
+    const balance_res_2 = await bjuno_token.balance({
+      "address": account_2.account.address,
+    });
+    const account_2_bal_after = balance_res_2.balance;
+    console.log("account_2_bal_after: ", JSON.stringify(account_2_bal_after, null, 2));
+    assert.equal(account_2_bal_before, account_2_bal_after);
+
+    // query names query added
+    const names_res = await bjuno_token.queryMsg({"names": {}});
+    console.log("names_res: ", JSON.stringify(names_res, null, 2));
+  });
+
+  /*
+    2) Migrate to contract with a different state structure (staking contract)
+      - Deposit for bJUNO
+      - Query staking contract state before
+      - Migrate staking contract
+      - Query staking contract state after with new param
+  */
+  it("Migrate to contract with a different state structure", async () => {
+    const transferAmount_1 = [{ "denom": "ujuno", "amount": "1200000" }];
+    await staking_contract.stakeForBjuno(
+      { account: contract_owner, transferAmount: transferAmount_1 }
+    );
+    await staking_contract.claimAndStake(
+      { account: contract_owner }
+    );
+
+    await staking_contract.advanceWindow(
+      { 
+        account: contract_owner,
+        customFees: {
+          amount: [{ amount: "500000", denom: "ujuno" }],
+          gas: "1000000",
+        }
+      }
+    );
+
+    // query staking contract info before
+    const info_before = await staking_contract.info();
+    console.log("info_before: ", JSON.stringify(info_before, null, 2));
+
+    // migrate staking contract
+    await staking_contract.migrate(
+      {
+        udit_value: "69"
+      },
+      staking_migrate_contract.codeId,
+      contract_owner
+    );
+
+    // query staking contract info after
+    const info_after = await staking_contract.info();
+    console.log("info_after: ", JSON.stringify(info_after, null, 2));
+  });
+});
