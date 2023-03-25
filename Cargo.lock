@@ -33,12 +33,6 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "base64"
-version = "0.11.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
-
-[[package]]
-name = "base64"
 version = "0.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "904dfeac50f3cdaba28fc6f57fdcddb75f49ed61346676a78c4ffe55877802fd"
@@ -69,22 +63,7 @@ dependencies = [
  "cw-utils",
  "cw2",
  "cw20",
- "schemars 0.8.8",
- "serde",
- "thiserror",
-]
-
-[[package]]
-name = "bjuno-token-migrate"
-version = "0.13.3"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std 1.0.0-beta8",
- "cw-storage-plus",
- "cw-utils",
- "cw2",
- "cw20",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "thiserror",
 ]
@@ -177,7 +156,7 @@ checksum = "ce94de6dd2b3d74cd8d9bc2bf5d6208ffed832ad946774ea9ed2a9ef7d95161f"
 dependencies = [
  "bigint",
  "cosmwasm-std 0.16.7",
- "schemars 0.8.8",
+ "schemars",
  "serde",
 ]
 
@@ -231,7 +210,7 @@ version = "1.0.0-beta8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0d75f6a05667d8613b24171ef2c77a8bf6fb9c14f9e3aaa39aa10e0c6416ed67"
 dependencies = [
- "schemars 0.8.8",
+ "schemars",
  "serde_json",
 ]
 
@@ -241,13 +220,13 @@ version = "0.16.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4a0d4e46ab20939af6366a71783324ae4babdedb111f0dd797d063a2e68718bc"
 dependencies = [
- "base64 0.13.0",
+ "base64",
  "cosmwasm-crypto 0.16.7",
  "cosmwasm-derive 0.16.7",
  "forward_ref",
- "schemars 0.8.8",
+ "schemars",
  "serde",
- "serde-json-wasm 0.3.2",
+ "serde-json-wasm",
  "thiserror",
  "uint",
 ]
@@ -258,13 +237,13 @@ version = "1.0.0-beta8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "915ca82bd944f116f3a9717481f3fa657e4a73f28c4887288761ebb24e6fbe10"
 dependencies = [
- "base64 0.13.0",
+ "base64",
  "cosmwasm-crypto 1.0.0-beta8",
  "cosmwasm-derive 1.0.0-beta8",
  "forward_ref",
- "schemars 0.8.8",
+ "schemars",
  "serde",
- "serde-json-wasm 0.3.2",
+ "serde-json-wasm",
  "thiserror",
  "uint",
 ]
@@ -435,7 +414,7 @@ dependencies = [
  "cosmwasm-std 1.0.0-beta8",
  "cw-storage-plus",
  "cw-utils",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "thiserror",
 ]
@@ -447,7 +426,7 @@ dependencies = [
  "cosmwasm-std 1.0.0-beta8",
  "criterion",
  "rand 0.8.5",
- "schemars 0.8.8",
+ "schemars",
  "serde",
 ]
 
@@ -458,7 +437,7 @@ dependencies = [
  "cosmwasm-std 1.0.0-beta8",
  "cw-storage-plus",
  "prost",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "thiserror",
 ]
@@ -469,7 +448,7 @@ version = "0.13.2"
 dependencies = [
  "cosmwasm-std 1.0.0-beta8",
  "cw-storage-plus",
- "schemars 0.8.8",
+ "schemars",
  "serde",
 ]
 
@@ -480,7 +459,7 @@ dependencies = [
  "cosmwasm-schema",
  "cosmwasm-std 1.0.0-beta8",
  "cw-utils",
- "schemars 0.8.8",
+ "schemars",
  "serde",
 ]
 
@@ -752,21 +731,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "mock-selection"
-version = "0.1.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std 1.0.0-beta8",
- "cw-controllers",
- "cw-storage-plus",
- "schemars 0.8.8",
- "secret-cosmwasm-storage",
- "serde",
- "snafu",
- "thiserror",
-]
-
-[[package]]
 name = "num-traits"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1007,7 +971,7 @@ dependencies = [
  "cw20",
  "rand 0.5.6",
  "rust_decimal",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "snafu",
  "thiserror",
@@ -1050,37 +1014,14 @@ dependencies = [
 
 [[package]]
 name = "schemars"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be77ed66abed6954aabf6a3e31a84706bedbf93750d267e92ef4a6d90bbd6a61"
-dependencies = [
- "schemars_derive 0.7.6",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "schemars"
 version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6b5a3c80cea1ab61f4260238409510e814e38b4b563c06044edf91e7dc070e3"
 dependencies = [
  "dyn-clone",
- "schemars_derive 0.8.8",
+ "schemars_derive",
  "serde",
  "serde_json",
-]
-
-[[package]]
-name = "schemars_derive"
-version = "0.7.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "11af7a475c9ee266cfaa9e303a47c830ebe072bf3101ab907a7b7b9d816fa01d"
-dependencies = [
- "proc-macro2",
- "quote",
- "serde_derive_internals",
- "syn",
 ]
 
 [[package]]
@@ -1102,29 +1043,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
 
 [[package]]
-name = "secret-cosmwasm-std"
-version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5ef24a4c7c02a2667b5c1c8a297879eca908428ac17068dcec2e61a4cba189ad"
-dependencies = [
- "base64 0.11.0",
- "schemars 0.7.6",
- "serde",
- "serde-json-wasm 0.2.3",
- "snafu",
-]
-
-[[package]]
-name = "secret-cosmwasm-storage"
-version = "0.10.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ffee3243bb13c02ddcdc15458526288d36ec23422ec43681ac5d48e7325d8327"
-dependencies = [
- "secret-cosmwasm-std",
- "serde",
-]
-
-[[package]]
 name = "sejuno-token"
 version = "0.13.2"
 dependencies = [
@@ -1134,7 +1052,7 @@ dependencies = [
  "cw-utils",
  "cw2",
  "cw20",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "thiserror",
 ]
@@ -1152,15 +1070,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ce31e24b01e1e524df96f1c2fdd054405f8d7376249a5110886fb4b658484789"
 dependencies = [
  "serde_derive",
-]
-
-[[package]]
-name = "serde-json-wasm"
-version = "0.2.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "120bad73306616e91acd7ceed522ba96032a51cffeef3cc813de7f367df71e37"
-dependencies = [
- "serde",
 ]
 
 [[package]]
@@ -1281,26 +1190,7 @@ dependencies = [
  "cw20",
  "rand 0.5.6",
  "rust_decimal",
- "schemars 0.8.8",
- "serde",
- "snafu",
- "thiserror",
-]
-
-[[package]]
-name = "staking-contract-migrate"
-version = "0.1.1"
-dependencies = [
- "cosmwasm-bignumber",
- "cosmwasm-schema",
- "cosmwasm-std 1.0.0-beta8",
- "cw-controllers",
- "cw-storage-plus",
- "cw2",
- "cw20",
- "rand 0.5.6",
- "rust_decimal",
- "schemars 0.8.8",
+ "schemars",
  "serde",
  "snafu",
  "thiserror",

@@ -1,0 +1,3 @@
+The Reward contract contains logic for distributing Juno delegation rewards to holders of bJUNO. After the Staking contract withdraws Juno delegation rewards to the Reward contract, Holders of bJUNO can then send a request to this contract to claim their accrued rewards.
+
+The Reward contract also stores the balance and reward index values for all bJUNO holders, which is used to calculate the number of bJUNO rewards that a specific holder has accrued.
