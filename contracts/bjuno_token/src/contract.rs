@@ -16,7 +16,7 @@ use crate::allowances::{
 };
 use crate::enumerable::{query_all_accounts, query_all_allowances};
 use crate::error::ContractError;
-use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg, MigrateMsg};
+use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{MinterData, TokenInfo, BALANCES, LOGO, MARKETING_INFO, TOKEN_INFO, Config, CONFIG, RewardContractResponseMsg};
 
 // version info for migration info
@@ -588,26 +588,6 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
         QueryMsg::MarketingInfo {} => to_binary(&query_marketing_info(deps)?),
         QueryMsg::DownloadLogo {} => to_binary(&query_download_logo(deps)?),
     }
-}
-
-#[entry_point]
-pub fn migrate(deps: DepsMut, _env: Env, msg: MigrateMsg) -> Result<Response, ContractError> {
-    let ver = cw2::get_contract_version(deps.storage)?;
-    // ensure we are migrating from an allowed contract
-    if ver.contract != CONTRACT_NAME {
-        return Err(StdError::generic_err("Can only upgrade from same type").into());
-    }
-    // note: better to do proper semver compare, but string compare *usually* works
-    if ver.version >= CONTRACT_VERSION.to_string() {
-        return Err(StdError::generic_err("Cannot upgrade from a newer version").into());
-    }
-
-    // set the new version
-    cw2::set_contract_version(deps.storage, CONTRACT_NAME, CONTRACT_VERSION)?;
-
-    // do any desired state migrations...
-
-    Ok(Response::default())
 }
 
 pub fn query_balance(deps: Deps, address: String) -> StdResult<BalanceResponse> {
