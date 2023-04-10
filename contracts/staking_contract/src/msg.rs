@@ -66,11 +66,6 @@ pub enum ExecuteMsg {
         new_owner: Addr,
     },
 
-    RecoverToken {
-        token: Addr,
-        amount: Uint128,
-    },
-
     RecoverJuno {
         amount: Uint128,
         denom: String,
