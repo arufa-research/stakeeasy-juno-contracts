@@ -159,7 +159,6 @@ pub fn execute(
         ExecuteMsg::PauseContract {} => try_pause(deps, env, _info),
         ExecuteMsg::UnpauseContract {} => try_unpause(deps, env, _info),
         ExecuteMsg::ClaimReward {} => try_claim(deps, env, _info),
-        ExecuteMsg::RecoverToken {token, amount} => try_recover_token(deps, env, _info, token, amount),
         ExecuteMsg::Redelegate {from, to} => try_redelegate(deps, env, _info, from, to),
 
         ExecuteMsg::RemoveValidator {address, redelegate} => try_remove_validator(deps, env, _info, address, redelegate),
@@ -254,42 +253,6 @@ pub fn try_remove_old_queue_data(deps: DepsMut, _env: Env, info: MessageInfo) ->
 
     Ok(Response::new()
         .add_attribute("action", "Remove old active queue 0 balances"))
-}
-
-pub fn try_recover_token(deps: DepsMut,
-    _env: Env,
-    _info: MessageInfo,
-    token: Addr, amount: Uint128) -> Result<Response, ContractError> {
-    let mut messages: Vec<CosmosMsg> = vec![];
-    let config = CONFIG.load(deps.storage)?;
-    let transfer_msg = Cw20ExecuteMsg::Transfer {
-        recipient: config.dev_address.to_string(),
-        amount,
-    };
-
-    if token.clone() == config.sejuno_token.ok_or_else(|| {
-        ContractError::Std(StdError::generic_err(
-            "seJuno token addr not registered".to_string(),
-        ))
-    })?.to_string() || token.clone() == config.bjuno_token.ok_or_else(|| {
-        ContractError::Std(StdError::generic_err(
-            "bJuno token addr not registered".to_string(),
-        ))
-    })?.to_string() {
-        ContractError::Std(StdError::generic_err(
-            "Invalid token address",
-        ));
-    }
-    // Transfer message
-    messages.push(CosmosMsg::Wasm(WasmMsg::Execute {
-        contract_addr: token.to_string(),
-        msg: to_binary(&transfer_msg)?,
-        funds: vec![],
-    }));
-
-    Ok(Response::new()
-        .add_messages(messages)
-        .add_attribute("action", "Recover token"))
 }
 
 pub fn try_claim(
